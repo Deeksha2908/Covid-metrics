@@ -10,13 +10,18 @@
         </v-btn>
         </li>
         <li>
-        <v-btn text>
+        <v-btn v-if="user==null" text>
           <router-link to="/signin">Signin</router-link>
         </v-btn>
         </li>
         <li>
-        <v-btn text>
+        <v-btn v-if="user==null" text>
           <router-link to="/signup">Sign up</router-link>
+        </v-btn>
+        </li>
+        <li>
+        <v-btn v-if="user!=null" text @click="logOut">
+          Logout
         </v-btn>
         </li>
       </ul>
@@ -29,15 +34,30 @@
 </template>
 
 <script>
-//import LoginButton from './components/LoginButton.vue';
-//import AuthBar from './components/AuthBar.vue'
-//import HelloWorld from './components/HelloWorld.vue';
+import firebase from "firebase";
 export default {
   name: "App",
 
-  data: () => ({
-    //
-  })
+  data(){
+     return{
+      user: null
+     }
+  },
+  created(){
+      firebase.auth().onAuthStateChanged(user=>{
+        this.user= user;
+        console.log(this.user)
+      })
+  },
+  methods:{
+    logOut() {
+      firebase.auth().signOut().then(() => {
+        firebase.auth().onAuthStateChanged(() => {
+          this.$router.push('/')
+        })
+      })
+    }
+  }
 };
 </script>
 

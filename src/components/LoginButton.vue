@@ -35,7 +35,7 @@ methods: {
       .auth()
       .signInWithEmailAndPassword(this.user.email, this.user.password)
       .then(() => {
-          this.$router.push('/home')
+          this.$router.push('/about')
       })
       .catch((error) => {
         alert(error.message);

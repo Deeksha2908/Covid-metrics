@@ -19,7 +19,7 @@
           </button>
           <p class="forgot-password text-right">
               Already registered 
-              <router-link :to="{name: 'login'}">sign in?</router-link>
+              <router-link :to="{name: 'Signin'}">sign in?</router-link>
           </p>
       </form>
   </div>
@@ -27,7 +27,7 @@
 
 <script>
 import firebase from "firebase";
-import '@/assets/css/main.css'
+
 export default {
 data() {
   return {
@@ -59,3 +59,6 @@ methods: {
 }
 };
 </script>
+<style>
+  @import '@/assets/css/main.css';
+</style>
