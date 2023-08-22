@@ -1,26 +1,21 @@
 <template>
-  <div class="vue-tempalte">
+  <div class="box">
       <form @submit.prevent="userRegistration">
-          <h3>Sign Up</h3>
-          <div class="mb-3">
-              <label>Name</label>
-              <input type="text" class="form-control form-control-lg" v-model="user.name" />
-          </div>
-          <div class="mb-3">
-              <label>Email</label>
-              <input type="email" class="form-control form-control-lg" v-model="user.email" />
-          </div>
-          <div class="mb-3">
-              <label>Password</label>
-              <input type="password" class="form-control form-control-lg" v-model="user.password" />
-          </div>
-          <button type="submit" class="btn btn-dark btn-lg btn-block">
+          <h1>Sign Up</h1>
+         
+             
+              <input type="text"  v-model="user.name" placeholder="Name" />
+          
+        
+              <input type="email" placeholder="Email" v-model="user.email" />
+          
+        
+              <input type="password" placeholder="Password" v-model="user.password" />
+        
+          <button type="submit" class="btn" @click="userRegistration">
              Sign Up
           </button>
-          <p class="forgot-password text-right">
-              Already registered 
-              <router-link :to="{name: 'Signin'}">sign in?</router-link>
-          </p>
+              
       </form>
   </div>
 </template>
@@ -59,6 +54,37 @@ methods: {
 }
 };
 </script>
-<style>
-  @import '@/assets/css/main.css';
+<style scoped>
+  body{
+    font-family: sans-serif;
+  }
+  .box{
+    width: 500px;
+    margin: 0 auto;
+    border : 2px solid grey;
+    margin-top: 100px;
+    padding: 20px;
+    height: 350px;
+  }
+  h1{
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc
+  }
+  .btn{
+    margin-top:20px;
+    width: 100%;
+    background-color: rgb(15, 15, 236);
+    color: white;
+    text-align: center;
+    padding: 10px;
+  }
+  .btn :hover{
+    cursor: pointer;
+  }
+
 </style>
