@@ -16,10 +16,18 @@ app.use(
   })
 )
 //db.getAllChartsByUser();
-app.get('/', db.getAllChartsByUser)
-app.post('/', db.postNewChart)
-app.put('/:id', db.updateChart)
-app.delete('/:id', db.deleteChart)
+app.get('/:id', (req, res)=>{
+  db.getAllChartsByUser(req, res)
+})
+app.post('/',(req, res)=>{
+  db.postNewChart(req, res)
+})
+app.put('/:id', (req, res)=>{
+  db.updateChart(req, res)
+})
+app.delete('/:id', (req, res)=>{
+  db.deleteChart(req, res)
+})
 
 const PORT = 3000;
 app.listen(PORT,()=>{

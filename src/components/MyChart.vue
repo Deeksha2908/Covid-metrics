@@ -1,8 +1,7 @@
 <template>
   <div class="chart">
-    <div :id="data.divID"></div>
+    <div id="chart"></div>
     <div>
-        <v-btn>Modify</v-btn>
         <v-btn @click="$emit('remove')">Delete</v-btn>
     </div>
   </div>
@@ -13,22 +12,22 @@ import c3 from "c3";
 export default {
   name: "MyChart",
   props: {
-    data: Object
+    yLabel: Array,
+    type: String
   },
-  data(){
-    return{
-      divId: `#${this.data.divID}`
-    }
-  },
+  
   mounted() {
+    //const yAxisData= this.data.yLabel;
+    //yAxisData.unshift('data1')
+    //console.log(this.data.yLabel)
     const data = {
       columns: [
-        this.data.yLabel
+        this.yLabel
       ],
-      type: this.data.type
+      type: this.type
     };
     const config = {
-      bindto: this.divId,
+      bindto: "#chart",
       data: data
     };
     this.chart= c3.generate(config);

@@ -49,6 +49,7 @@ export default {
         console.log(this.user)
       })
   },
+
   methods:{
     logOut() {
       firebase.auth().signOut().then(() => {

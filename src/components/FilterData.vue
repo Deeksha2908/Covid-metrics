@@ -24,15 +24,21 @@
       </div>
     </div>
     <div class="btn">
-      <v-btn variant="outlined" class="btn" @click="addNewChart">Generate Chart</v-btn>
+      <v-btn variant="outlined" class="btn" @click="addNewChart">Create Chart</v-btn>
     </div>
-    <MyChart class="chart" v-for="(chart,index) in Charts" :key="chart.id" :data="chart.data" @remove="Charts.splice(index,1)" ></MyChart>
+    <MyChart v-if="yLabel.length>0"
+      class="chart"
+      :yLabel="yLabel"
+      :type="chartType"
+      @remove="deleteChart">
+    </MyChart>
   </div>
 </template>
 <script>
 import axios from "axios";
 import { state } from "../assets/states";
 import MyChart from "./MyChart.vue";
+import firebase from "firebase";
 export default {
   name: "FilterData",
   components: {
@@ -49,29 +55,25 @@ export default {
       yLabel: [],
       display: 1,
       Charts: [],
-      chartType:"",
-      id:0
+      chartType: "",
+      data: null,
+      chartid: null
     };
   },
-  created(){
-    const data=JSON.parse(decodeURIComponent(this.$route.params.id));
-    this.yLabel= data.yLabel;
-    this.chartType= data.type;
-    this.id= this.id+1;
-      this.Charts.push({
-        id: this.id,
-        data: {
-          xLabel: this.xLabel,
-          yLabel: this.yLabel,
-          type: this.chartType,
-          divID: `chart${this.id}`
-        }
-      });
-  }
-  ,
+  created() {
+    
+    if(this.$route.params.id != '-1'){
+    this.data= JSON.parse(decodeURIComponent(this.$route.params.id));
+      //this.xLabel= Array.from(Object.values(this.data.xLabel));
+      this.yLabel = Array.from(Object.values(this.data.yLabel));
+      this.chartType = this.data.type;
+      this.chartid= this.data.chartid
+    }
+    
+  },
   methods: {
     async getData() {
-      this.display = 2;
+      //this.display = 2;
       const url = "https://api.rootnet.in/covid19-in/stats/history";
       let result = await axios.get(url);
       let dateWiseFilteredData = result.data.data.filter(item => {
@@ -81,13 +83,12 @@ export default {
         return item.day;
       });
       this.xLabel.unshift("x");
-      console.log("xvalue", this.xLabel);
       this.yLabel = dateWiseFilteredData.map(item => {
         return item.regional.reduce(this.getDatewiseTotal, 0);
       });
-      this.yLabel.unshift("data1");
-      //console.log("yvalue",this.yLabel)
-      this.display = 3;
+      //this.yLabel.unshift("data1");
+      console.log("yvalue",this.yLabel)
+      //this.display = 3;
     },
     getDatewiseTotal(total, obj) {
       let add = 0;
@@ -99,16 +100,37 @@ export default {
     },
     async addNewChart() {
       await this.getData();
-      this.id= this.id+1;
-      this.Charts.push({
-        id: this.id,
-        data: {
-          xLabel: this.xLabel,
-          yLabel: this.yLabel,
-          type: this.chartType,
-          divID: `chart${this.id}`
-        }
-      });
+      console.log("coming from getdata function")
+      console.log("posting from filterdata",this.dataToPost)
+      if(this.$route.params.id==='-1'){
+      await axios.post("http://localhost:3000/",{
+        username: firebase.auth().currentUser.displayName,
+        useremail: firebase.auth().currentUser.email,
+        ylabel : this.yLabel,
+        charttype: this.chartType
+      }
+        ).then(resp => {
+        console.log(resp.data)
+        this.chartid= resp.data
+    })
+    }
+      else{
+        await axios.put(`http://localhost:3000/${this.chartid}`,{
+        ylabel : this.yLabel,
+        charttype: this.chartType 
+      }).then(resp => {
+        console.log(resp.data)
+    })
+    }
+    },
+    async deleteChart()
+    {
+      this.yLabel= [],
+      this.chartType= ''
+       await axios.delete(`http://localhost:3000/${this.chartid}`).then(resp => {
+        console.log(resp.data)
+    }).catch(() => console.log("error"))
+      
     }
   }
 };
@@ -124,10 +146,10 @@ export default {
   width: 100%;
   flex-grow: 1;
 }
-.chart{
+.chart {
   margin: 100px;
 }
-.btn{
+.btn {
   margin: 0 auto;
 }
 </style>
