@@ -1,7 +1,8 @@
 <template>
   <div class="flex-container">
-    <ChartCart v-for="chart in ChartList" :key="chart.id" :data="chart" :addnew="false"></ChartCart>
-    <ChartCart :addnew="true"></ChartCart>
+    <ChartCart v-for="(chart, index) in ChartList" :key="chart.chartid" :data="chart" :addnew="!addnew" :index="index"></ChartCart>
+    <ChartCart :addnew="addnew"></ChartCart>
+    
   </div>
 </template>
 
@@ -15,7 +16,7 @@ export default {
     },
     data(){
        return{
-        itemCount: 5,
+        addnew: true,
         ChartList:[]
        }
     },

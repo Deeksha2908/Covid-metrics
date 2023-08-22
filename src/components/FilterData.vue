@@ -24,12 +24,14 @@
       </div>
     </div>
     <div class="btn">
-      <v-btn variant="outlined" class="btn" @click="addNewChart">Create Chart</v-btn>
+      <v-btn v-if="isNew===true" variant="outlined" class="btn" @click="addNewChart">Create Chart</v-btn>
+      <v-btn v-if="isNew===false" variant="outlined" class="btn" @click="ModifyChart">Modify Chart</v-btn>
+      <v-btn v-if="isNew===false" variant="outlined" class="btn" @click="addNewChart">Save as new Chart</v-btn>
     </div>
     <MyChart v-if="yLabel.length>0"
       class="chart"
       :yLabel="yLabel"
-      :type="chartType"
+      :type="chartType" 
       @remove="deleteChart">
     </MyChart>
   </div>
@@ -57,18 +59,20 @@ export default {
       Charts: [],
       chartType: "",
       data: null,
-      chartid: null
+      chartid: null,
+      isNew: null
     };
   },
   created() {
     
     if(this.$route.params.id != '-1'){
     this.data= JSON.parse(decodeURIComponent(this.$route.params.id));
-      //this.xLabel= Array.from(Object.values(this.data.xLabel));
-      this.yLabel = Array.from(Object.values(this.data.yLabel));
-      this.chartType = this.data.type;
-      this.chartid= this.data.chartid
+      this.yLabel = Array.from(Object.values(this.data.ylabel));
+      this.chartType = this.data.charttype;
+      this.chartid= this.data.chartid;
+      this.isNew= false;
     }
+    else this.isNew= true;
     
   },
   methods: {
@@ -100,9 +104,7 @@ export default {
     },
     async addNewChart() {
       await this.getData();
-      console.log("coming from getdata function")
-      console.log("posting from filterdata",this.dataToPost)
-      if(this.$route.params.id==='-1'){
+  
       await axios.post("http://localhost:3000/",{
         username: firebase.auth().currentUser.displayName,
         useremail: firebase.auth().currentUser.email,
@@ -111,17 +113,19 @@ export default {
       }
         ).then(resp => {
         console.log(resp.data)
-        this.chartid= resp.data
+        this.chartid= resp.data;
+        alert(`created a new chart with chart id ${this.chartid}`)
     })
-    }
-      else{
+    },
+    async ModifyChart() {
+        await this.getData();
         await axios.put(`http://localhost:3000/${this.chartid}`,{
         ylabel : this.yLabel,
         charttype: this.chartType 
-      }).then(resp => {
-        console.log(resp.data)
+      }).then(() => {
+        console.log("modified")
+        alert('modified chart')
     })
-    }
     },
     async deleteChart()
     {

@@ -21,7 +21,7 @@
         </li>
         <li>
         <v-btn v-if="user!=null" text @click="logOut">
-          Logout
+          <span style="color: white">Logout</span>
         </v-btn>
         </li>
       </ul>
