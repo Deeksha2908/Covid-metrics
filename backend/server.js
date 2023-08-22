@@ -5,7 +5,9 @@ const db = require('./queries')
 //db.postNewChart();
 //db.updateChart()
 //db.deleteChart();
-db.getAllChartsByUser();
+//db.getAllChartsByUser();
+const cors = require('cors')
+app.use(cors())
 
 app.use(bodyParser.json())
 app.use(
@@ -13,10 +15,11 @@ app.use(
     extended: true,
   })
 )
+//db.getAllChartsByUser();
 app.get('/', db.getAllChartsByUser)
 app.post('/', db.postNewChart)
-app.put('/', db.updateChart)
-app.delete('/', db.deleteChart)
+app.put('/:id', db.updateChart)
+app.delete('/:id', db.deleteChart)
 
 const PORT = 3000;
 app.listen(PORT,()=>{

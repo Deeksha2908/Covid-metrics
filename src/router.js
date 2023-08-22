@@ -28,7 +28,7 @@ export default new Router({
     },
 
     {
-      path: '/about',
+      path: '/about/:useremail',
       name: 'about',
       component: () => import('./views/ThumbnailView.vue')
     },

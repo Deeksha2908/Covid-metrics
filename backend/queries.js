@@ -1,3 +1,5 @@
+const { response } = require('express')
+
 //const configdata= require('./dbconfig.json')
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -9,11 +11,18 @@ const pool = new Pool({
 })
 
 const getAllChartsByUser= ()=>{
-    pool.query('SELECT * FROM chartusers', (error, results) => {
+  //const email = parseInt(request.params.useremail);
+  const email = 'deeksha290815@gmail.com'
+
+    pool.query('SELECT * FROM chartusers WHERE useremail = $1',[email], (error, results) => {
         if (error) {
+          console.log("error")
           throw error
         }
-        else console.log(results.rows)
+        else {
+          console.log(results.rows);
+          console.log("success")
+        }
       })
 }
 
@@ -26,7 +35,7 @@ const postNewChart = () =>{
         if (error) {
           throw error
         }
-        else console.log(results.rows)
+        response.send(results.rows)
       })
    
 }
@@ -49,14 +58,14 @@ const updateChart= () =>{
 }
 
 const deleteChart= () => {
-    //const id = parseInt(request.params.id)
+  const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM chartusers WHERE chartid = $1', [1], (error, results) => {
+  pool.query('DELETE FROM chartusers WHERE chartid = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
-    //response.status(200).send(`User deleted with ID: ${id}`)
-    console.log("deleted")
+    response.status(200).send(`chart deleted with ID: ${id}`)
+    //console.log("deleted")
   })
 
 }

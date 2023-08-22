@@ -1,11 +1,12 @@
 <template>
-    <div class="flex-container">
-     <ChartCart v-for="chart in ChartList" :key="chart.id" :data="chart"></ChartCart>
-    </div>
+  <div class="flex-container">
+    <ChartCart v-for="chart in ChartList" :key="chart.id" :data="chart"></ChartCart>
+  </div>
 </template>
 
 <script>
 import ChartCart from '@/components/ChartCart.vue';
+//import axios from 'axios'
 export default {
     name:'ThumbnailView',
     components:{
@@ -17,7 +18,17 @@ export default {
         ChartList:[]
        }
     },
-    mounted(){
+    async mounted(){
+        const pathname= window.location.pathname
+        const lastIndex= pathname.lastIndexOf('/');
+        const username= pathname.slice(lastIndex + 1);
+       console.log(username)
+
+       /* await axios.get("http://localhost:3000/").then(resp => {
+
+console.log(resp.data);
+});*/
+
         this.ChartList= [
             {
                 id: 1,
@@ -52,9 +63,8 @@ export default {
 </script>
 
 <style scoped>
-.flex-container{
-    display: flex;
-    flex-wrap: wrap;
-    
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
