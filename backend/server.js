@@ -13,6 +13,11 @@ app.use(
     extended: true,
   })
 )
+app.get('/', db.getAllChartsByUser)
+app.post('/', db.postNewChart)
+app.put('/', db.updateChart)
+app.delete('/', db.deleteChart)
+
 const PORT = 3000;
 app.listen(PORT,()=>{
     console.log(`server listenig on port ${PORT}`)
