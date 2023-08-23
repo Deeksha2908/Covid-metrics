@@ -114,6 +114,7 @@ export default {
         ).then(resp => {
         console.log(resp.data)
         this.chartid= resp.data;
+        this.isNew= false;
         alert(`created a new chart with chart id ${this.chartid}`)
     })
     },
