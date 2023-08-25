@@ -19,7 +19,7 @@ const getAllChartsByUser= (req, res)=>{
           throw error
         }
         else {
-          //console.log(results.rows)
+          
           res.send(results.rows);
           console.log("success")
         }
@@ -32,7 +32,7 @@ const postNewChart = (req, res) =>{
   const query = {
     text: 'INSERT INTO chartusers(username, useremail,ylabel, charttype) VALUES($1, $2, $3, $4) RETURNING *',
     values: [username, useremail, ylabel, charttype],
-    //values:['deeksha sinha', 'deeksha290815@gmail.com', [1,2,3,4,5], [10,20,30,40,50],'bar']
+
   }
     pool.query(query,(error, results) => {
         if (error) {
