@@ -2,13 +2,7 @@ const { response } = require('express')
 
 //const configdata= require('./dbconfig.json')
 const Pool = require('pg').Pool
-const pool = new Pool({
-  user: "deekshasinha",
-  host: 'localhost',
-  database: "deekshasinha",
-  password: 'postpw298',
-  port: 5432,
-})
+
 
 const getAllChartsByUser= (req, res)=>{
   const email = req.params.id;
